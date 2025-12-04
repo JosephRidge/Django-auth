@@ -3,9 +3,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django_daraja.mpesa.core import MpesaClient
 
 
 # Create your views here.
+def index(request):
+    cl = MpesaClient()
+    # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+    phone_number = '0110085152'
+    amount = 1
+    account_reference = 'Fun Facts Kenya'
+    transaction_desc = 'Service Purchase'
+    callback_url = 'https://api.darajambili.com/express-payment'
+    response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    return HttpResponse(response)
+
+
 def home(request):
     context ={}
     return render(request,'authApp/home.html',context)
@@ -66,3 +80,24 @@ def registerUser(request):
 
     context ={"form":form}
     return render(request,'authApp/register_form.html',context)
+
+
+def mpesaPayment(request):
+    # get user phone number (mpesa)
+    # get amount to be paid 
+    # trigger the payment
+    if request.method == 'POST':
+        phoneNumber = request.POST.get('phoneNumber')
+        amount = int(float(request.POST.get('amount')))
+        cl = MpesaClient()
+        # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+        phone_number = phoneNumber
+        amount = amount
+        account_reference = 'Auth Web( Authenitcation Service)'
+        transaction_desc = 'Service Purchase'
+        callback_url = 'https://api.darajambili.com/express-payment'
+        response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    else:
+        pass 
+    context= {}
+    return render(request, 'authApp/prompt_stk_push.html', context)

@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %} 
+<form action="" method="POST">
+    {% csrf_token %} 
+  <div class="mb-3">
+    <label for="phoneNumber" class="form-label">Enter Phone Number</label>
+    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" aria-describedby="phoneHelp">
+    <div id="phoneHelp" class="form-text">place a valid mpesa number eg. 07....</div>
+  </div>
+  <div class="mb-3">
+    <label for="amount" class="form-label">Amount/ Bill</label>
+    <input type="text" class="form-control" id="amount" name="amount" >
+  </div> 
+  <button type="submit" class="btn btn-dark">make payment</button>
+</form>
+{% endblock %}
